@@ -1,0 +1,65 @@
+<%= javascript_include_tag "application" %>
+<%= stylesheet_link_tag "application" %>
+<header class="navbar">
+  <h1>Задачи</h1>
+  <a href="#" id="add_link"><%= image_tag('addTodoIcon.png') %></a>
+</header>
+<div class="my-container container-fluid">
+  <div class="row row-flex">
+    <% @projects.each do |project| %>
+      <div class="col-xl-4 col-lg-4 col-md-6 col-sm-12 col-xs-12">
+        <div class="task">
+          <b><%= project.title %></b>
+          <hr>
+          <ul>
+            <% @todos.each do |todo| %>
+              <% if todo.project_id == project.id%>
+                <%= form_with scope: :todo, :url=>{:controller=>'custom_controller', :action=>'update'}, :html => {:id=>'update_form_id', :method=>'get'}  do |form| %>
+                  <li>
+                    <%= form.hidden_field :text, :value => "?id=#{todo.id}&is_completed=#{todo.is_completed}" %>
+                    <% if todo.is_completed %>
+                      <input type="checkbox" class='icheck-me' data-skin="square" data-color="blue" value="<%todo.id %>" checked>
+                      <label><s><%= todo.text %></s></label>
+                    <% else %>
+                      <input type="checkbox" class='icheck-me' data-skin="square" data-color="blue">
+                      <label><%= todo.text %></label>
+                    <% end %>
+                  </li>
+                <%end %>
+              <% end %>
+            <% end %>
+          </ul>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</div>
+<div class="new_todo">
+  <div class="container-fluid">
+    <h2>Новая задача</h2>
+    <hr>
+    <%= form_with scope: :todo, :url=>{:controller=>'custom_controller', :action=>'create'}, :html => {:id=>'form_id', :method=>'get'}  do |form| %>
+      <%= form.text_field :text, placeholder: "Название задачи", :id=>"input_id" %></br>
+      <% @cat =@projects.map{|p| [p.title, p.id]}%>
+      <% @cat.unshift(['Категория',-1])%>
+      <%= form.select(:project_id, @cat, {}, {:id=>'select_id'})%>
+    <% end %>
+    </br>
+    <div class="row row-flex">
+      <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-xs-6" id="button1">
+        <div class="cancel-link">
+          <div class="my-btn">
+            <a href="#" id="close_id">ОТМЕНА</a>
+          </div>
+        </div>
+      </div>
+      <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-xs-6" id="button2">
+        <div class="ok-link">
+          <div class="my-btn">
+            <%= link_to "ОК", {:controller=>'custom_controller', :action=>'create'}, :id=>'link_id'%>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
