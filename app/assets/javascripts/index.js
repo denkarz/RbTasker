@@ -3,14 +3,18 @@ $(document).ready( function () {
     icheck();
     $("#select_id").select2({
         minimumResultsForSearch: -1
-    });
-    $('#link_id').click(function (evt) {
-        let selected = document.getElementsByName('todo[project_id]')[0]
-        let project_id = selected.options[selected.selectedIndex].value
-        let text = $.trim($('#input_id').val())
-        if (text === '' || project_id === '-1') evt.preventDefault()
-        else $('#link_id').attr('href','/custom_controller/create?project_id='+ project_id +'&amp;text=' + text)
     })
+
+    $('#link_id').click(function (evt) {
+    //     // let selected = document.getElementsByName('todo[project_id]')[0]
+    //     // let project_id = selected.options[selected.selectedIndex].value
+    //     // let text = $.trim($('#input_id').val())
+    //     // if (text === '' || project_id === '-1') evt.preventDefault()
+    //     // else
+        $('#form_id').submit()
+        window.location.href = '/';
+    })
+
     $('#add_link').click(function (evt) {
         if ($('.new_todo').hasClass('shadow')) evt.preventDefault()
         else $('.new_todo').show().toggleClass("shadow");
@@ -19,13 +23,11 @@ $(document).ready( function () {
          $('.new_todo').hide().toggleClass("shadow");
     })
     $('li').click(function (evt) {
-        let param = this.getElementsByTagName('input')[0].value
-        window.location = '/custom_controller/update' + param
+        this.parentNode.submit()
         }
     )
     $('li .icheck-me').on("ifChanged", function () {
-        let param2 = this.parentNode.parentElement.getElementsByTagName('input')[0].value
-        window.location = '/custom_controller/update' + param2
+        this.parentNode.parentNode.submit()
     })
 })
 
