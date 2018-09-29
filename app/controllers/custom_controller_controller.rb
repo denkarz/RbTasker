@@ -2,20 +2,14 @@ class CustomControllerController < ApplicationController
   def index
     @projects = Project.all
     @todos = Todo.all
-    respond_to do |format|
-      format.html
-      format.json { render :json => @projects.to_json(:include => [:todos]) }
-    end
+    redirect_to'/'
   end
 
   def update
     @u_todo = Todo.find(params["todo"]["id"])
     @u_todo.toggle(:is_completed)
     @u_todo.save!
-    respond_to do |format|
-      format.html
-      format.json { render :json => @todos.to_json }
-    end
+    redirect_to'/'
   end
 
   def create
